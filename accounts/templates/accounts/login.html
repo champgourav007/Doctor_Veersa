@@ -1,52 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <header>
-        <h1 id="loginHeader">Login</h1>
-        <form method="POST">
-            {% csrf_token %}
-            <label for="usertype">UserType</label>
-            <select name="usertype" id="usertype">
-                <option value="Patient">Patient</option>
-                <option value="Doctor">Doctor</option>
-            </select>
-            
-            <label for="username">UserName</label>
-            <input name="username" type="text"><br><br>
+{% extends 'base.html' %}
+{% load static %}
 
-            <label for="firstname">First Name</label>
-            <input name="firstname" type="text"><br><br>
+{% block title %}<title>Login</title>{% endblock title %}
+  
+{% block cssfiles %}
+  <link rel="stylesheet" href=" {% static 'accounts/css/style.css' %} " />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"/>
+{% endblock cssfiles %}
+  
 
-            <label for="middlename">Middle Name</label>
-            <input name="middlename" type="text"><br><br>
 
-            <label for="lastname">Last Name</label>
-            <input name="lastname" type="text"><br><br>
+{% block body %}
+<div class="login-box">
+      <h1>Login</h1>
+      
+      {% if messages %}
+       <center><h3> {{messages}} </h3></center> 
+      {% endif %}
 
-            <label for="mobileno">Mobile Number</label>
-            <input name="mobileno" type="number"><br><br>
+      <form method="POST">
+        {% csrf_token %}
+        
+        <label for="usertype">Usertype</label>
+        <select name="usertype" id="usertype">
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+        </select>
 
-            <label for="gender">Gender</label>
-            <select name="gender" id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="transgender">Transgender</option>
-            </select><br><br>
+        <label for="username">Username</label>
+        <input type="text" placeholder="" name="username" id="username"/>
+        <label for="password">Password</label>
+        <input type="password" placeholder="" name="password" id="password" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+    <p class="para-2">
+      Not have an account? <a href=" {% url 'signup-page' %} ">Sign Up Here</a>
+    </p>
+{% endblock body %}
 
-            <label for="password">Password</label>
-            <input name="password" type="password"><br><br>
-
-            <label for="password1">Password</label>
-            <input name="password1" type="paassword"><br><br>
-
-            <input type="submit">
-        </form>
-    </header>
-</body>
-</html>

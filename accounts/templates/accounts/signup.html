@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %} " />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="signup-box">
+      <h1>Sign Up</h1>
+      <h4>It's free and only takes a minute</h4>
+      <form method="POST">
+        {% csrf_token %}
+
+        
+    
+
+        {% comment %} <label for="usertype">User Type</label> {% endcomment %}
+        <label for="usertype">Usertype</label>
+        <select name="usertype" id="usertype">
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+        </select>
+
+        <label for="username">UserName</label>
+        <input name ="username" id="username" type="text">
+
+        <label for="firstname">First Name</label>
+        <input name ="firstname" id="firstname" type="text">
+
+        {% comment %} <label for="middlename">Middle Name</label>
+        <input name ="middlename" id="middlename" type="text"> {% endcomment %}
+
+        <label for="lastname">Last Name</label>
+        <input name ="lastname" id="lastname" type="text">
+
+        <label for="mobileNo">Contact Number</label>
+        <input name ="mobileNo" id="mobileNo" type="text">
+
+        <label for="email">Email</label>
+        <input name ="email" id="email" type="email">
+
+        <label for="password">Password</label>
+        <input name ="password" id="password" type="password">
+
+        <label for="password1">Confirm Password</label>
+        <input name ="password1" id="password1" type="password">
+
+        <label for="gender">Gender</label>
+        <select name="gender" id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+       
+        <input type="submit" value="Submit" />
+      </form>
+
+      <p>
+        By clicking the Sign Up button,you agree to our <br />
+        <a href="#">Terms and Condition</a> and <a href="#">Policy Privacy</a>
+      </p>
+
+    </div>
+
+
+    <p class="para-2">
+      Already have an account? <a href=" {% url 'login-page' %} ">Login here</a>
+    </p>
+  </body>
+</html>
