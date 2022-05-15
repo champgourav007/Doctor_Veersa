@@ -1,8 +1,8 @@
 from django.forms import ModelForm
-from django.contrib.auth.models import User
+from .models import DoctorUserModel
 
-class LoginForm(ModelForm):
+class DoctorForm(ModelForm):
     class Meta:
-        model = User
+        model = DoctorUserModel
         # exclude = ("user", "unique_id")
-        fields = "__all__"
+        fields = ("specialist", )

@@ -1,0 +1,1 @@
+web: gunicorn Doctor_Veersa.wsgi --log-file -

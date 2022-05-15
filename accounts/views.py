@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .forms import LoginForm
+from .forms import DoctorForm
 from .models import DoctorUserModel, UserModel, PatientUserModel
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -36,7 +36,12 @@ def signup_view(request):
         password1 = data.get("password1")
         email = data.get("email")
         if password == password1:
-            user = User.objects.create_user(username=username, password=password)
+            try:
+                user = User.objects.create_user(username=username, password=password)
+            except:
+                return render(request, "accounts/signup.html",{
+                    "messages" : "Account Already Exists!!! Please Login!!!"
+                })
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
@@ -54,7 +59,9 @@ def signup_view(request):
                 "message": "Password Does't Match",
             })
         return redirect('login-page')
-    return render(request, "accounts/signup.html")
+    return render(request, "accounts/signup.html",{
+        "specialists" : DoctorForm(),
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -97,11 +104,13 @@ def login_view(request):
             #     return render(request, "accounts/home_page.html",{
             #         "user" : {username}
             #     })
+        else:
+            return render(request, 'accounts/login.html', {
+                "messages" : "Account not Found!!!! Please Sign Up!!",
+            })
 
 
-    return render(request, 'accounts/login.html', {
-        "messages" : "Account Not Found!!!"
-    })
+    return render(request, 'accounts/login.html')
 
 
 def logout_view(request):

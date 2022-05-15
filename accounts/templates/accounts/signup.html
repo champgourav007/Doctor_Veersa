@@ -1,21 +1,19 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %} " />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"/>
-  </head>
-  <body>
-    <div class="signup-box">
+{% block title %}<title>Sign Up</title>{% endblock title %}
+
+{% block cssfiles %}
+  <link rel="stylesheet" href="{% static 'accounts/css/style.css' %} " />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"/>
+{% endblock cssfiles %}
+    
+{% block body %}
+<div class="signup-box">
       <h1>Sign Up</h1>
       <h4>It's free and only takes a minute</h4>
       <form method="POST">
         {% csrf_token %}
-
-        
-    
 
         {% comment %} <label for="usertype">User Type</label> {% endcomment %}
         <label for="usertype">Usertype</label>
@@ -23,6 +21,8 @@
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
         </select>
+
+        
 
         <label for="username">UserName</label>
         <input name ="username" id="username" type="text">
@@ -52,7 +52,14 @@
         <select name="gender" id="gender">
             <option value="male">Male</option>
             <option value="female">Female</option>
+            <option value="transgender">Transgender</option>
         </select>
+        <span style="visibility:hidden;" id="specialist">
+          <label for="specialist">Specialist</label>
+          {% for specialist in specialists %}
+            {{specialist}}
+          {% endfor %}
+        </span>
        
         <input type="submit" value="Submit" />
       </form>
@@ -68,5 +75,9 @@
     <p class="para-2">
       Already have an account? <a href=" {% url 'login-page' %} ">Login here</a>
     </p>
+
+    <script src=" {% static 'accounts/js/signup.js' %} "></script>
+{% endblock body %}
+    
   </body>
 </html>
