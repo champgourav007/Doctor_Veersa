@@ -4,19 +4,9 @@ usertypeNode.addEventListener("click", check)
 
 function check(){
     if(usertypeNode.value == "doctor"){
-        changeVisibility();
+        specialistNode.style.visibility = "visible";
     }
     else{
-        changeVisibility();
-    }
-}
-
-
-function changeVisibility(){
-    if(specialistNode.style.visibility == "visible"){
-        specialistNode.style.visibility = "hidden"
-    }
-    else{
-        specialistNode.style.visibility = "visible"
+        specialistNode.style.visibility = "hidden";
     }
 }

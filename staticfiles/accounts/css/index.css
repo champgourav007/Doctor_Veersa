@@ -83,7 +83,7 @@ banner
 
 .navbar-default {
     background-color: #fff;
-    padding: 10px 0;
+    padding: 5px 0;
     transition: all 0.3s;
 }
 
@@ -186,7 +186,7 @@ banner
 }
 
 .bg-color {
-    background-color: RGBA(13, 70, 83, 0.78);
+    background-color: rgba(13, 70, 83, 0.78);
     min-height: 650px;
 }
 

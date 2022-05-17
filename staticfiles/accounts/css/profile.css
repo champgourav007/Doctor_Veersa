@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Contact-section {
+    display: block;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 100%;
+    min-height: fit-content;
+}
+
+.Contact-section-details {
+    padding: 0 15% 7% 15%;
+    /* top right bottom left */
+    font-family: "Poppins Medium";
+    text-align: left;
+}
+
+.csd {
+    background-color: teal;
+    height: 100%;
+    text-align: left;
+    color: black;
+    border-radius: 25px;
+    padding: 5%;
+    margin: 5% 10% 0 10%;
+}
+
+.fdata {
+    padding: 10% 0 0 10%;
+}
+
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=textarea],
+select[name=gender],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+.profile-pic-div {
+
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid grey;
+    margin: 9% 0 0 0;
+
+
+}
+
+#photo {
+    /* top: 50%; */
+    height: 100%;
+    width: 100%;
+}
+
+#file {
+    display: none;
+}
+
+#uploadBtn {
+    height: 40px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: wheat;
+    line-height: 30px;
+    font-family: sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    display: none;
+}
