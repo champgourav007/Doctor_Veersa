@@ -22,7 +22,7 @@ class UserModel(models.Model):
     usertype = models.CharField(max_length=100, choices=USER_TYPE, default='Patient', null=True)
 
     def __str__(self):
-        return f"{self.user.first_name}"
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class PatientUserModel(models.Model):
     patient = models.OneToOneField(UserModel, on_delete=models.CASCADE)
@@ -32,7 +32,7 @@ class PatientUserModel(models.Model):
     country = models.CharField(max_length=255, null=True, blank=True)
     pincode = models.IntegerField(null=True, blank=True)
     street_address = models.TextField(null=True, blank=True)
-    profile_image = models.ImageField(upload_to="media/patientImages", default="media/patientImage/default.png", null=True, blank=True)
+    profile_image = models.ImageField(upload_to="media/patientImages", default="media/patientImages/default.png", null=True, blank=True)
     ID_TYPE = (
         ("Asdhar Card", "Aadhar Card"),
         ("Voter Id Card", "Voter Id Card"),
@@ -40,11 +40,11 @@ class PatientUserModel(models.Model):
         ("Pan Card", "Pan Card"),
         ("Others", "Others"),
     )
-    gov_id_type = models.CharField(max_length=100, choices=ID_TYPE, default="Aadhar Card")
+    gov_id_type = models.CharField(max_length=100, choices=ID_TYPE, null=True)
     gov_id_no = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return f"{self.patient.first_name}"
+        return f"{self.patient.user.first_name} {self.patient.user.last_name}"
 
        
 SPECIALIST_CHOICES = (
@@ -81,6 +81,7 @@ SPECIALIST_CHOICES = (
 
     )
 
+
 class DoctorUserModel(models.Model):
     doctor = models.OneToOneField(UserModel, on_delete=models.CASCADE)
     dob = models.DateField(null=True)
@@ -96,25 +97,51 @@ class DoctorUserModel(models.Model):
 
     specialist = models.CharField(max_length=255, choices=SPECIALIST_CHOICES, default="Sports Medicine Specialists")
 
+    def __str__(self):
+        return f"{self.doctor.user.first_name} {self.doctor.user.last_name}"
+
 class SlotsTime(models.Model):
     slottiming = models.ForeignKey('Slots', on_delete=models.CASCADE)
     time = models.TimeField()
 
+    def __str__(self):
+        return f" {self.slottiming.date} {self.time}"
+
 class Slots(models.Model):
     doctor_slot = models.ForeignKey(DoctorUserModel, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(unique=True)
+
+    def __str__(self):
+        return f"{self.date}"
+TYPE = (
+    ("Emergency","Emergency"),
+    ("Normal", "Normal"),
+)
+
+class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    appointment_type = models.CharField(max_length=100, choices=TYPE, default="Normal", null=True)
+    # slot = models.CharField(max_length=100)
+    slots = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f" {self.full_name} {self.slots.date}"
+
+    
+
+
 
 class BookAppointment(models.Model):
-    user_appointment = models.OneToOneField(DoctorUserModel, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(DoctorUserModel, on_delete=models.CASCADE)
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
     full_name = models.CharField(max_length=255, null=True, blank=True)
 
-    TYPE = (
-        ("Emergency","Emergency"),
-        ("Normal", "Normal"),
-    )
     appointment_type = models.CharField(max_length=100, choices=TYPE, default="Normal", null=True)
-    slots = models.OneToOneField(Slots, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.full_name}"
 
 
 class Prescription(models.Model):

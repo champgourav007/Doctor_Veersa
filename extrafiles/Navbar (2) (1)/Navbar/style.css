@@ -1,0 +1,153 @@
+.navbar {
+    margin-bottom: 0px;
+    border: 0px;
+}
+.navbar {
+    border-radius: 0px;
+}
+.navbar-default {
+
+    background-color: rgba(28,74,90, 0.9);
+    border-color: #e7e7e7;
+    padding: 20px 0;
+    transition: all 0.3s;
+}
+.navbar {
+    border-radius: 0px;
+}
+.navbar-brand
+{
+	font-family: 'Chewy', cursive;
+	font-size: 32px;
+}
+
+.navbar-brand img {
+    padding-top: 2px;
+    width: 120px !important;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #EA6045;
+}
+
+/* #myNav{
+    background: rgba(28,74,90, 0.9);
+} */
+
+.myBtn, .myBtn:hover, .myBtn:focus
+{
+	background-color: rgba(12, 184, 182, 0.91);
+	border-radius: 3px;
+	color: #fff;
+}
+
+
+@media (max-width: 768px) {
+	.navbar-collapse {
+		background: rgba(28,74,90, 0.9);
+	}
+}
+.top-nav-collapse {
+    padding: 0;
+    background: rgba(28,74,90, 0.9);
+}
+
+.white, .white:hover, .white:focus
+{
+	color: #fff;
+	width: 100% !important;
+}
+.block
+{
+	display: block;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    color: #fff;
+    text-transform: uppercase;
+    background-color: rgba(201, 233, 127, 0.21);
+}
+.navbar-default .navbar-nav > li > a
+{
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-weight: 300;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus
+{
+	color: #fff;
+    text-transform: uppercase;
+    background-color: rgba(12, 184, 182, 0.21);
+}
+.affix {
+    background-color: #ffffff !important;
+}
+.affix .navbar-nav > li > a:hover, .affix .navbar-nav > li > a:focus
+{
+    background-color: rgba(12, 184, 182) !important;
+}
+
+
+#cross{
+    position: absolute;
+    top: 0.1cm;
+    left: 1.7cm;
+}
+
+.sidebar {
+    height: 6cm;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(61, 127, 149, 0.842);
+    overflow-x: hidden;
+    padding-top: 16px;
+    position: absolute;
+    top: 2.4cm;
+    left: 27.4cm;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  
+  /* Style sidebar links */
+  .sidebar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+  }
+  
+  /* Style links on mouse-over */
+  .sidebar{
+      display: none;
+  }
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Style the main content */
+  .main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    padding: 0px 10px;
+  }
+  
+  /* Add media queries for small screens (when the height of the screen is less than 450px, add a smaller padding and font-size) */
+  @media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+  }
+
+  #fa:hover{
+      color: black;
+      text-shadow: whitesmoke;
+  }
+
+@media (max-width: 768px) 
+{
+    .sidebar{
+        position: absolute;
+        left: 1cm;
+    }
+}

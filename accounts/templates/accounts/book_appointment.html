@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}<title>Book Appointment</title>{% endblock title %}
+{% block cssfiles %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href= {% static "accounts/css/font-awesome.min.css" %} >
+    <link rel="stylesheet" type="text/css" href= {% static "accounts/css/bootstrap.min.css" %}>
+    <link rel="stylesheet" href=" {% static 'accounts/css/style.css' %}" />
+    <link rel="stylesheet" href=" {% static 'accounts/css/home_page.css' %}">
+{% endblock cssfiles %}
+
+
+{% block body %}
+    <section id="banner" class="banner">
+        <div class="bg-color">
+          <nav class="navbar navbar-default navbar-fixed-top" id="myNav">
+            <div class="container">
+              <div class="col-md-12">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="#"><img src=" {% static 'accounts/images/medico_care.png' %} " class="img-responsive" style="width: 140px; margin-top: -16px;"></a>
+                  <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href=" {% url 'index-page' %} ">Home</a></li>
+                        <li class=""><a href="#service">Services</a></li>
+                        <li class=""><a href="#about">About</a></li>
+                        <li class=""><a href="#testimonial">Testimonial</a></li>
+                        <li class=""><a href="#contact">Contact</a></li>    
+                        <li style="margin-left: 140px;" ><a href="" disabled>Welcome,  {{user}}</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <a href="#"><img style="border-radius: 50%; padding-top: 5px; width: 40px;" id="img2" src=" {{user.profile_image.url}} " alt="img"></a>
+                    <div class="sidebar" id="side">
+                        <a href="#"><img id="cross" src=" {% static 'accounts/images/cross.png' %}" alt="img" width="20px"></a>
+                        <a href=" {% url 'profile' user.id %} " id="fa"><i class="fa fa-fw fa-user"></i>Profile</a>
+                        <a href=" {% url 'home-page' user.id %} " style="padding-top: 0.2cm;" id="fa"><i class="fa fa-fw fa-home"></i>Home</a>
+                        <a href="#" id="fa"><i class="fa fa-fw fa-wrench"></i>Settings</a>
+                        <a href="#" id="fa"><i class="fa fa-fw fa-envelope"></i>Notification</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </section>
+
+    <div class="slot-box">
+      <h1>Book Your Appointment</h1>
+
+      {% if errors %}
+        <h4 style="color:red;">{{errors}}</h4>
+      {% else %}
+        <form method="POST" id="form" >
+
+            {% csrf_token %}
+
+            {% if available_dates %}
+                <label for="date">Date</label>
+                <select name="date" id="date">
+                    {% if clicked_date %}
+                        <option value="{{clicked_date}}">{{clicked_date}} Selected</option>
+                        {% else %}
+                        <option value=""></option>
+                    {% endif %}
+                    {% for date  in available_dates %}
+                        <p>{{date}}</p>
+                        {% if clicked_date != date.date %}
+                            <option onclick="changeSlots(this)" value="{{date}}">{{date}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% endif %}
+
+            {% if available_timings %}
+                <label for="time">Time</label>
+                <select name="time" id="time">
+                    {% for time in available_timings %}
+
+                        <option value="{{time}}">{{time}}</option>
+                    {% endfor %}
+                    {% comment %} <option value="morning">09:00am-12:00pm (Morning)</option>
+                    <option value="evening">05:00pm-08:00pm (Evening)</option> {% endcomment %}
+                </select>
+            {% endif %}
+            <label for="appointment-type">Appointment Type</label>
+            {% comment %} <select name="type" id="type"> {% endcomment %}
+                {% for type in appointment_type %}
+                    {{type}}
+                {% endfor %}    
+            {% comment %} </select> {% endcomment %}
+            
+            <br>
+            <br>
+            <div>
+                <button style=" display:flex; justify-content:center;"><a  href=" {% url 'save-appointment' doctor user.id  %} ">Book</a></button>
+            </div>
+            
+        </form>
+      {% endif %}
+    </div>
+{% endblock body %}
+
+{% block jsfiles %}
+    <script src=" {% static 'accounts/js/book_appointment.js' %} "></script>
+{% endblock jsfiles %}

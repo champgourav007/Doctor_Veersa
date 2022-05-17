@@ -1,19 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-    <a href=" {% url 'logout-page' %} ">Logout</a>
-    <a href=" {} "></a>
-    <h1>View of {{user.usertype}} </h1>
-    <h1>Welcome {{ user.username }} </h1>
+{% extends 'base.html' %}
+{% load static %}
 
-    <h1>User Data</h1>
-    {{user_data.id}}
+{% block cssfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href=" {% static 'accounts/css/home_page.css' %}">
+{% endblock cssfiles %}
 
-</body>
-</html>
+{% block title %}<title>Home Page</title>{% endblock title %}
+
+{% block body %}
+    <section id="banner" class="banner">
+        <div class="bg-color">
+          <nav class="navbar navbar-default navbar-fixed-top" id="myNav">
+            <div class="container">
+              <div class="col-md-12">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="#"><img src=" {% static 'accounts/images/medico_care.png' %} " class="img-responsive" style="width: 140px; margin-top: -16px;"></a>
+                  <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="">Home</a></li>
+                        <li class=""><a href="#service">Services</a></li>
+                        <li class=""><a href="#about">About</a></li>
+                        <li class=""><a href="#testimonial">Testimonial</a></li>
+                        <li class=""><a href="#contact">Contact</a></li>
+                        <li style="margin-left: 140px;" ><a href="" disabled>Welcome,  {{user}}</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <a href="#"><img style="border-radius: 50%; padding-top: 5px; width: 40px;" id="img2" src=" {{user.profile_image.url}} " alt="img"></a>
+                    
+                    <div class="sidebar" id="side">
+                        <a href="#"><img id="cross" src=" {% static 'accounts/images/cross.png' %}" alt="img" width="20px"></a>
+                        <a href=" {% url 'profile' user.id %} " id="fa"><i class="fa fa-fw fa-user"></i>Profile</a>
+                        <a href=" {% url 'home-page' user.id %} " style="padding-top: 0.2cm;" id="fa"><i class="fa fa-fw fa-home"></i>Home</a>
+                        <a href="#" id="fa"><i class="fa fa-fw fa-wrench"></i>Settings</a>
+                        <center><a href="{% url 'logout-page' %}" id="fa"><i class="glyphicon glyphicon-log-out"></i></a></center>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </section>
+
+      
+      {% if user_model.usertype == "patient" %}
+        <center><h1 style="margin-top:80px;">Book Your Appointment</h1></center>
+        {% for doctor in available_doctors %}
+        
+        <div style="margin-top:100px" class="col-md-3 col-sm-3 col-xs-6">
+            <div class="thumbnail">
+                {% comment %} {% if  %}{% endif %} {% endcomment %}
+              <img src= " {{doctor.doctor_data.profile_image.url}} " alt="{{doctor.doctor_data.profile_image}}" class="team-img">
+              <div class="caption">
+                <h3>{{doctor.name}}</h3>
+                <p>{{doctor.doctor_data.specialist}}</p>
+                <ul class="list-inline">
+                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <div style="display:flex; justify-content:center;">
+                    {% comment %} <div>{{doctor.name.name}}</div> {% endcomment %}
+                    <button>
+                      <a href=" {% url 'book-appointment' doctor.doctor_data.id user_data.id %} ">Book</a>
+                    </button>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+        {% else %}
+            <center><h1 style="margin-top:80px;">All Appointments</h1></center>    
+            {% for appointment in appointments %}
+                <div style="margin-top:100px" class="col-md-3 col-sm-3 col-xs-6">
+                <div class="thumbnail">
+                    {% comment %} {% if  %}{% endif %} {% endcomment %}
+                  <img src= " " alt="" class="team-img">
+                  <div class="caption">
+                    <h3> {{appointment}} </h3>
+                    <p>{{appointment.time}}</p>
+                    <ul class="list-inline">
+                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                      <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                      {% comment %} <div style="display:flex; justify-content:center;">
+                        <button>
+                          <a href=" ">Done</a>
+                        </button>
+                      </div> {% endcomment %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            
+            {% endfor %}
+
+      {% endif %}
+
+     
+
+
+{% endblock body %}
+
+{% block jsfiles %}
+    <script src=" {% static 'accounts/js/home_page.js' %} "></script>
+{% endblock jsfiles %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Document</title>
+{% endblock title %}
+
+{% block cssfiles %}
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+{% endblock cssfiles %}
+
+{% block body %}
+
+
+  <div class='Contact-section' id='contact'>
+    <h1>My Profile</h1>
+    <div class='Contact-section-details'>
+      <div class='row csd'>
+        <div class='col-md-12'>
+          <div class="profile-pic-div">
+            <img src="{{}}" id="photo">
+            <input type="file" id="file">
+            <label for="file" id="uploadBtn">Upload Photo</label>
+          </div>
+
+        </div>
+
+        <div class="row csd">
+          <div class='col-md-12 fdata'>
+            <form>
+
+              <label for="firstname">First Name</label>
+              <input type="text" placeholder="" name="firstname" id="firstname" value="{{}}" />
+
+              <label for="middlename">Middle Name</label>
+              <input type="text" placeholder="" name="middlename" id="middlename" />
+
+              <label for="lastname">Last Name</label>
+              <input type="text" placeholder="" name="lastname" id="lastname" />
+
+              <label for="email">Email</label>
+              <input type="email" placeholder="" name="email" id="email" />
+
+              <label for="age">Age</label>
+              <input type="number" placeholder="" name="age" id="age" />
+
+              <label for="mobile">Mobile Number</label>
+              <input type="number" placeholder="" name="mobile" id="mobile" />
+
+              <label for="address">Address</label>
+              <textarea name="address" id="address" cols="5" rows="2"></textarea>
+
+              <label for="gender">Gender</label>
+              <select name="gender" id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="female">Other</option>
+              </select>
+
+              <label for="password">Password</label>
+              <input type="text" placeholder="" name="password" id="password" />
+
+              <label for="password1">Confirm Password</label>
+              <input type="text" placeholder="" name="password1" id="password1" />
+
+
+              <button class="btn btn-primary" type="submit">Update Profile</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
+
+{% block jsfiles %}
+    <script src=" {% static 'accounts/js/profile.js' %}"></script>
+{% endblock jsfiles %}
