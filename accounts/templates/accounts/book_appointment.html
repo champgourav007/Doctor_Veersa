@@ -88,7 +88,7 @@
                 </select>
             </form>
             {% endif %}
-        <form method="POST" action=" {% url 'save-appointment' doctor user.id %} ">
+        <form method="POST" action=" {% url 'save-appointment' pk doctor user_data.id %} ">
             {% csrf_token %}
             {% if available_timings %}
                 <label for="time">Time</label>

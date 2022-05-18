@@ -72,7 +72,7 @@
                   <div style="display:flex; justify-content:center;">
                     {% comment %} <div>{{doctor.name.name}}</div> {% endcomment %}
                     <button>
-                      <a href=" {% url 'book-appointment' doctor.doctor_data.id user_data.id %} ">Book</a>
+                      <a href=" {% url 'book-appointment' pk doctor.doctor_data.id user_data.id %} ">Book</a>
                     </button>
                   </div>
                 </ul>
@@ -93,10 +93,10 @@
                 <div style="margin-top:100px" class="col-md-3 col-sm-3 col-xs-6">
                 <div class="thumbnail">
                     {% comment %} {% if  %}{% endif %} {% endcomment %}
-                  <img src= " " alt="" class="team-img">
+                  <img src= " {{user_data.profile_image.url}} " alt="" class="team-img">
                   <div class="caption">
                     <h3> {{appointment}} </h3>
-                    <p>{{appointment.time}}</p> 
+                    <p>Slot: {{appointment.appointment.slots}}</p> 
                     <ul class="list-inline">
                       <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                       <li><a href="#"><i class="fa fa-twitter"></i></a></li>

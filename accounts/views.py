@@ -16,6 +16,7 @@ def getAllAppointments(id):
 
 def home_page(request, pk):
     context = {}
+    # context["pk"] = pk
     # user = User.objects.get(id=pk)
     user_model = UserModel.objects.get(user_id=pk)
     if user_model.usertype == "patient":
@@ -23,10 +24,12 @@ def home_page(request, pk):
         all_user = User.objects.all()
 
         doctors_data = []
-        doctors = UserModel.objects.filter(usertype="doctor", )
+        doctors = UserModel.objects.filter(usertype="doctor")
+        print(doctors)
         for i in doctors:
             try:
-                slots = Slots.objects.filter(doctor_slot_id = i.id)
+                doctor_id = DoctorUserModel.objects.get(doctor_id = i.id)
+                slots = Slots.objects.filter(doctor_slot_id = doctor_id)
                 if slots:
                     doctors_data.append({
                         "name" : i,
@@ -136,7 +139,7 @@ def update_profile(request, pk):
                 if key == "gov_id_number":
                     user_data.gov_id_no = values
                 if key == "password":
-                    
+
                     if request.POST.get("password") == request.POST.get("password1"):
                         change_password(values, pk)
                     else:
@@ -148,12 +151,6 @@ def update_profile(request, pk):
     
     return redirect("profile", pk=pk)
 
-            
-
-            
-
-    
-    return HttpResponse("Done!!")
 
 def index_view(request):
     doctors = UserModel.objects.filter(usertype = 'doctor')
@@ -271,9 +268,9 @@ def logout_view(request):
 
 
 
-def book_appointment(request, pk, user):
+def book_appointment(request, pk, doctor, user):
     user_data = PatientUserModel.objects.get(id=user)
-    slots = Slots.objects.filter(doctor_slot_id=pk)
+    slots = Slots.objects.filter(doctor_slot_id=doctor)
     available_dates = []
     today_date = datetime.date.today()
     for slot in slots[:10]:
@@ -283,8 +280,10 @@ def book_appointment(request, pk, user):
     #     print(i)
 
     context = {}
-    context["user"] = user_data
+    context["user"] = User.objects.get(id=pk)
+    context["user_model"] = UserModel.objects.get(user_id=pk)
     context["clicked_date"] = available_dates[0]
+    context["user_data"] = user_data
 
     if request.method == "POST":
         print(request.POST)
@@ -305,16 +304,19 @@ def book_appointment(request, pk, user):
 
     context["available_dates"] = available_dates
     context["appointment_type"] = AppointmentType()
-    context["doctor"] = pk
+    context["doctor"] = doctor
+    context["pk"] = pk
 
     return render(request, "accounts/book_appointment.html", context)
 
-def save_appointment(request, doctor, user):
+def save_appointment(request, pk, doctor, user):
     data  = request.POST
     full_name = PatientUserModel.objects.get(id=user).__str__()
     appointment_type = data.get("appointment_type")
     slots = data.get("time")
-    appointment = Appointment.objects.create(user_id=user,full_name=full_name, appointment_type=appointment_type)
+    print(data)
+
+    appointment = Appointment.objects.create(user_id=pk,full_name=full_name, appointment_type=appointment_type)
     appointment.slots = str(slots)
     appointment.save()
 
