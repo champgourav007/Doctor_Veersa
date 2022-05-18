@@ -328,7 +328,7 @@ def save_appointment(request, pk, doctor, user):
     reports = Reports.objects.create(prescription_id=prescription.id)
     reports.save()
 
-    return render(request, "accounts/done.html")
+    return redirect('home-page' , pk=pk)
 
 
 
