@@ -3,6 +3,7 @@ from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 from Doctor_Veersa import settings
+import datetime
 
 # Create your models here.
 class UserModel(models.Model):
@@ -32,9 +33,9 @@ class PatientUserModel(models.Model):
     country = models.CharField(max_length=255, null=True, blank=True)
     pincode = models.IntegerField(null=True, blank=True)
     street_address = models.TextField(null=True, blank=True)
-    profile_image = models.ImageField(upload_to="media/patientImages", default="media/patientImages/default.png", null=True, blank=True)
+    profile_image = models.ImageField(upload_to="media/patientImages", default="media/doctorImages/default.png", null=True, blank=True)
     ID_TYPE = (
-        ("Asdhar Card", "Aadhar Card"),
+        ("Aadhar Card", "Aadhar Card"),
         ("Voter Id Card", "Voter Id Card"),
         ("Passport Id", "Passposrt Id"),
         ("Pan Card", "Pan Card"),
@@ -46,6 +47,14 @@ class PatientUserModel(models.Model):
     def __str__(self):
         return f"{self.patient.user.first_name} {self.patient.user.last_name}"
 
+    def get_age(self):
+        today = datetime.date.today()
+        birthdate = self.dob
+        if birthdate is None:
+            return 0
+
+        age = today.year - birthdate.year
+        return age
        
 SPECIALIST_CHOICES = (
         ("Sports Medicine Specialists","Sports Medicine Specialists"),
@@ -89,7 +98,7 @@ class DoctorUserModel(models.Model):
     state = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=255, null=True, blank=True)
     pincode = models.IntegerField(null=True, blank=True)
-    clinic_address = models.TextField()
+    street_address = models.TextField()
     profile_image = models.ImageField(upload_to="media/doctorImages", default= "media/doctorImages/default.png", null=True, blank=True)
     doctor_certificate = models.ImageField(upload_to="media/doctorImages", null=True, blank=True)
     about = models.TextField(null=True, blank=True)
@@ -99,6 +108,15 @@ class DoctorUserModel(models.Model):
 
     def __str__(self):
         return f"{self.doctor.user.first_name} {self.doctor.user.last_name}"
+
+    def get_age(self):
+        today = datetime.date.today()
+        birthdate = self.dob
+        if birthdate is None:
+            return 0
+
+        age = today.year - birthdate.year
+        return age
 
 class SlotsTime(models.Model):
     slottiming = models.ForeignKey('Slots', on_delete=models.CASCADE)
@@ -126,7 +144,7 @@ class Appointment(models.Model):
     slots = models.CharField(max_length=100)
 
     def __str__(self):
-        return f" {self.full_name} {self.slots.date}"
+        return f" {self.full_name} {self.slots}"
 
     
 

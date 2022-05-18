@@ -6,69 +6,142 @@
 {% endblock title %}
 
 {% block cssfiles %}
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href=" {% static 'accounts/css/home_page.css' %} ">
+  <link rel="stylesheet" href=" {% static 'accounts/css/profile.css' %} " />
 {% endblock cssfiles %}
 
 {% block body %}
 
+       <section id="banner" class="banner">
+        <div class="bg-color">
+          <nav class="navbar navbar-default navbar-fixed-top" id="myNav">
+            <div class="container">
+              <div class="col-md-0">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="#"><img src=" {% static 'accounts/images/medico_care.png' %} " class="img-responsive" style="width: 140px; margin-top: -16px;"></a>
+                  <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href=" {% url 'home-page' pk %} ">Home</a></li>
+                        <li class=""><a href="#service">Services</a></li>
+                        <li class=""><a href="#about">About</a></li>
+                        <li class=""><a href="#testimonial">Testimonial</a></li>
+                        <li class=""><a href="#contact">Contact</a></li>
+                        <li style="margin-left: 140px;" ><a href="" disabled>Welcome,  {{user_data}}</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+                    <a href="#"><img style="border-radius: 50%; padding-top: 10px; width: 40px;" id="img2" src=" {{user_data.profile_image.url}} " alt="img"></a>
+                    
+                    <div class="sidebar" id="side">
+                        <a href="#"><img id="cross" src=" {% static 'accounts/images/cross.png' %}" alt="img" width="20px"></a>
+                        <a href=" {% url 'profile' pk %} " id="fa"><i class="fa fa-fw fa-user"></i>Profile</a>
+                        {% if user_model.usertype == "doctor" %}
+                        <a href=" {% url 'set-slots' pk %} " id="fa"><i class="fa fa-calendar"></i> Set My Slot</a>
+                        {% else %}
+                        <a href=" " id="fa"><i class="fa fa-calendar"></i> My Appointments</a>
+                        {% endif %}
+                        <a href="#" id="fa"><i class="fa fa-fw fa-wrench"></i>Settings</a>
+                        <a href="{% url 'logout-page' %}" id="fa"><i class="glyphicon glyphicon-log-out"></i>Logout</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </section>
 
-  <div class='Contact-section' id='contact'>
-    <h1>My Profile</h1>
+
+
+  <div  class='Contact-section' id='contact'>
+    <h1 style="margin-top:80px;"> {{user_data}} Profile</h1>
     <div class='Contact-section-details'>
       <div class='row csd'>
         <div class='col-md-12'>
           <div class="profile-pic-div">
-            <img src="{{}}" id="photo">
-            <input type="file" id="file">
-            <label for="file" id="uploadBtn">Upload Photo</label>
+            <img src="{{ user_data.profile_image.url }}" id="photo" alt="{{user.first_name}}">
+            
           </div>
 
         </div>
 
-        <div class="row csd">
+        <div style="margin-top:100px" class="row csd">
           <div class='col-md-12 fdata'>
-            <form>
+            <form method="POST" action=" {% url 'update-profile' pk %} ">
+              {% csrf_token %}
+
+              {% comment %} <label for="file">Change Profile Pic</label> {% endcomment %}
+              <label for="file">Change Pic</label>
+              <input type="file" name="file" id="file">
 
               <label for="firstname">First Name</label>
-              <input type="text" placeholder="" name="firstname" id="firstname" value="{{}}" />
-
-              <label for="middlename">Middle Name</label>
-              <input type="text" placeholder="" name="middlename" id="middlename" />
+              <input type="text" placeholder="" name="firstname" id="firstname" value="{{ user.first_name }}" />
 
               <label for="lastname">Last Name</label>
-              <input type="text" placeholder="" name="lastname" id="lastname" />
+              <input type="text" placeholder="" name="lastname" id="lastname" value="{{ user.last_name }}" />
 
               <label for="email">Email</label>
-              <input type="email" placeholder="" name="email" id="email" />
+              <input type="email" placeholder="" name="email" id="email" value="{{ user.email }}" />
+
+              <label for="dob">DOB</label>
+              <input type="date" name="dob" id="dob" value="{{ user_data.dob }}"> 
 
               <label for="age">Age</label>
-              <input type="number" placeholder="" name="age" id="age" />
+              <input type="number" placeholder="" disabled name="age" id="age" value="{{ age }}" />
 
               <label for="mobile">Mobile Number</label>
-              <input type="number" placeholder="" name="mobile" id="mobile" />
+              <input type="number" placeholder="" name="mobile" id="mobile" value="{{ user_model.mobile_no }}" />
+
+              <label for="city">City</label>
+              <input type="text" name="city" value="{{ user_data.city }}">
+
+              <label for="state">State</label>
+              <input type="text" name="state" value="{{ user_data.state }}">
+
+              <label for="pincode">Pincode</label>
+              <input type="number" id="pincode" name="pincode" value="{{user_data.pincode}}">
+
+              <label for="country">Country</label>
+              <input type="text" id="country" name="country" value="{{user_data.country}}">
 
               <label for="address">Address</label>
-              <textarea name="address" id="address" cols="5" rows="2"></textarea>
+              <textarea name="address" id="address"  value="">{{ user_data.street_address }}</textarea>
 
               <label for="gender">Gender</label>
-              <select name="gender" id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="female">Other</option>
-              </select>
+
+              <p id="gender_value" hidden>{{user_model.gender}}</p>
+              {% for g in gender %}
+                  {{g}}
+                  {% comment %} {{g}} {% endcomment %}
+              {% endfor %}
+
+
+              {% comment %} </select> {% endcomment %}
+
+              <p hidden id="gov_id"> {{user_data.gov_id_type}} </p>
+              <label for="gov_id_type">Id Proof</label>
+              {% comment %} <select name="gov-id" id="gov-id"> {% endcomment %}
+                {% for id in idform %}
+                    {{id}}
+                {% endfor %}
+              {% comment %} </select> {% endcomment %}
+              <br>
+              <label for="gov_id_number">Id Number</label>
+              <input type="text" id="gov_id_nummber" name="gov_id_number" value="{{ user_data.gov_id_no }}">
 
               <label for="password">Password</label>
-              <input type="text" placeholder="" name="password" id="password" />
+              <input type="password" placeholder="Change your Password" name="password" id="password"  />
 
               <label for="password1">Confirm Password</label>
-              <input type="text" placeholder="" name="password1" id="password1" />
+              <input type="password" placeholder="Retype Your Password" name="password1" id="password1"  value="None"/>
 
-
-              <button class="btn btn-primary" type="submit">Update Profile</button>
+              <center><input type="submit" value="Submit"></center>
+              
 
             </form>
           </div>
@@ -80,4 +153,5 @@
 
 {% block jsfiles %}
     <script src=" {% static 'accounts/js/profile.js' %}"></script>
+    <script src=" {% static 'accounts/js/home_page.js' %} "></script>
 {% endblock jsfiles %}

@@ -34,11 +34,14 @@
     padding: 10% 0 0 10%;
 }
 
-input[type=text],
+/* input[type=text],
 input[type=email],
 input[type=number],
-input[type=textarea],
-select[name=gender],
+input[type=textarea], */
+select,
+/* input[type=date],
+input[type=file], */
+input,
 textarea {
     width: 100%;
     padding: 12px;
@@ -72,9 +75,9 @@ textarea {
     width: 100%;
 }
 
-#file {
+/* #file {
     display: none;
-}
+} */
 
 #uploadBtn {
     height: 40px;
@@ -91,4 +94,17 @@ textarea {
     font-size: 15px;
     cursor: pointer;
     display: none;
+}
+
+input[type="submit"] {
+    display: flex;
+    justify-content: center;
+    width: 320px;
+    height: 35px;
+    margin-top: 20px;
+    border: none;
+    background-color: #49c1a2;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
 }

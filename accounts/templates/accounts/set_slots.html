@@ -3,9 +3,6 @@
 
 {% block title %}<title>Book Appointment</title>{% endblock title %}
 {% block cssfiles %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href= {% static "accounts/css/font-awesome.min.css" %} >
     <link rel="stylesheet" type="text/css" href= {% static "accounts/css/bootstrap.min.css" %}>
@@ -29,18 +26,18 @@
                         <li class=""><a href="#about">About</a></li>
                         <li class=""><a href="#testimonial">Testimonial</a></li>
                         <li class=""><a href="#contact">Contact</a></li>
-                        <li style="margin-left: 140px;" ><a href="" disabled>Welcome,  {{user_data}}</a></li>
+                        <li style="margin-left: 140px;" ><a href="" disabled>Welcome,  {{user}}</a></li>
                     </ul>
                 </div>
                 </div>
                 <div class="collapse navbar-collapse navbar-right" id="myNavbar">
-                    <a href="#"><img style="border-radius: 50%; padding-top: 10px; width: 40px;" id="img2" src=" {{user_data.profile_image.url}} " alt="img"></a>
+                    <a href="#"><img style="border-radius: 50%; padding-top: 10px; width: 40px;" id="img2" src=" {{user.profile_image.url}} " alt="img"></a>
                     
                     <div class="sidebar" id="side">
                         <a href="#"><img id="cross" src=" {% static 'accounts/images/cross.png' %}" alt="img" width="20px"></a>
                         <a href=" {% url 'profile' pk %} " id="fa"><i class="fa fa-fw fa-user"></i>Profile</a>
                         {% if user_model.usertype == "doctor" %}
-                        <a href=" {% url 'set-slots' pk %} " id="fa"><i class="fa fa-calendar"></i> Set My Slot</a>
+                        <a href=" " id="fa"><i class="fa fa-calendar"></i> Set My Slot</a>
                         {% else %}
                         <a href=" " id="fa"><i class="fa fa-calendar"></i> My Appointments</a>
                         {% endif %}
@@ -55,19 +52,12 @@
       </section>
 
     <div class="slot-box">
-        {% if user_model.usertype == "doctor" %}
-            <h1>Set Your Slot</h1>
-        {% else %}
-            <h1>Book Your Appointment</h1>
-        {% endif %}
+      <h1>Book Your Appointment</h1>
 
       {% if errors %}
         <h4 style="color:red;">{{errors}}</h4>
-
-
       {% else %}
-
-      {% if user_model.usertype == "patient" %}
+            {% csrf_token %}
 
             {% if available_dates %}
             <form method="POST" id="form">
@@ -109,34 +99,10 @@
             </div>
             
         </form>
-        
-        
-    {% else %}
-        <form id="slot-form" action=" {% url 'set-slots' pk %} " method="POST">
-            {% csrf_token %}
-            <label for="date">Choose Date</label>
-            <input name="date" type="date" id="date" value="{{date}}">
-{% comment %}             
-            <p id="time-div">
-                <label id="time-label" for="time">Choose Timings</label>
-                <label for="time-{{1}}">Timing-1</label>
-                <input type="time" id="time-{{1}}" name="time-{{1}}"  onchange="addTime()">
-            </p>  {% endcomment %}
-            <label for="time">Choose Timings</label>
-            <input type="time" name="time" id="time">
-            {% comment %} <p id="time-label"></p> {% endcomment %}
-
-
-            
-            <input type="submit" value="Submit">
-        </form>
-        {% endif %}
-        
-        {% endif %}
+      {% endif %}
     </div>
 {% endblock body %}
-        
-        {% block jsfiles %}
-        <script src=" {% static 'accounts/js/book_appointment.js' %} "></script>
-        <script src=" {% static 'accounts/js/home_page.js' %} "></script>
-        {% endblock jsfiles %}
+
+{% block jsfiles %}
+    <script src=" {% static 'accounts/js/book_appointment.js' %} "></script>
+{% endblock jsfiles %}

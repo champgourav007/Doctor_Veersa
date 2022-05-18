@@ -1,7 +1,7 @@
-from multiprocessing import context
+from cProfile import Profile
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .forms import DoctorForm, AppointmentType
+from .forms import DoctorDobForm, DoctorForm, AppointmentType, IdForm, PatientDobForm, PatientGender
 from .models import BookAppointment, DoctorUserModel, Prescription, Reports, UserModel, PatientUserModel, Slots, SlotsTime, Appointment
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -19,17 +19,22 @@ def home_page(request, pk):
     # user = User.objects.get(id=pk)
     user_model = UserModel.objects.get(user_id=pk)
     if user_model.usertype == "patient":
-        # user = PatientUserModel.objects.get(patient_id=user_model.id)
         user_data = PatientUserModel.objects.get(patient_id=user_model.id)
         all_user = User.objects.all()
 
         doctors_data = []
-        doctors = UserModel.objects.filter(usertype="doctor")
+        doctors = UserModel.objects.filter(usertype="doctor", )
         for i in doctors:
-            doctors_data.append({
-                "name" : i,
-                "doctor_data" : DoctorUserModel.objects.get(doctor_id = i.id)                 
-            })
+            try:
+                slots = Slots.objects.filter(doctor_slot_id = i.id)
+                if slots:
+                    doctors_data.append({
+                        "name" : i,
+                        "doctor_data" : DoctorUserModel.objects.get(doctor_id = i.id),        
+                        "slots" : slots,         
+                    })
+            except:
+                continue
 
         context["available_doctors"] = doctors_data
 
@@ -45,13 +50,110 @@ def home_page(request, pk):
     context["user"] = user_data
     context["user_model"] = user_model
     context["user_data"] = user_data
+    context["pk"] = pk
 
 
 
     return render(request, 'accounts/home_page.html', context)
 
 def show_profile(request, pk):
-    pass
+    context = {}
+    user = User.objects.get(id=pk)
+    user_model = UserModel.objects.get(user_id = user.id)
+    if user_model.usertype == "patient":
+        user_data = PatientUserModel.objects.get(patient_id = user_model.id)
+        context["dob"] = PatientDobForm()
+    if user_model.usertype == "doctor":
+        user_data = DoctorUserModel.objects.get(doctor_id = user_model.id)
+        context["dob"] = DoctorDobForm()
+        
+
+    print(user_data.street_address)
+    context["user"] = user
+    context["user_model"] = user_model
+    context["user_data"] = user_data
+    
+    context["age"] = user_data.get_age()
+    context["pk"] = pk
+    context["idform"] = IdForm()
+    context["gender"] = PatientGender()
+ 
+    return render(request, "accounts/profile.html", context)
+
+
+def change_password(password, pk):
+    user = User.objects.get(id=pk)
+    user.set_password(password)
+    user.save()
+
+
+
+
+def update_profile(request, pk):
+    user_model = UserModel.objects.get(user_id=pk)
+    context = {}
+    print(request.POST)
+    if user_model.usertype == "patient":
+        user_data = PatientUserModel.objects.get(patient_id = user_model.id)
+        if request.FILES.get("file"):
+            file = PatientUserModel(profile_image=request.FILES.get("file"))
+            file.save()
+        # user_data
+    if user_model.usertype == "doctor":
+        if request.FILES.get("file"):
+            file = DoctorUserModel(profile_image=request.FILES.get("file"))
+            file.save()
+        user_data = DoctorUserModel.objects.get(doctor_id = user_model.id)
+    context["messages"] = "Changes is Successfully Updated!!!!"
+    for key, values in request.POST.items():
+        if len(values) > 0 and values != "" or values != None:
+            try:
+                if key == "firstname":
+                    user_data.firstname = values
+                if key == "lastname":
+                    user_data.lastname = values
+                if key == "email":
+                    user_data.email = values
+                if key == "dob":
+                    print(values)
+                    user_data.dob = values
+                if key == "mobile":
+                    user_data.mobile_no = values
+                if key == "city":
+                    user_data.city = values
+                if key == "state":
+                    user_data.state = values
+                if key == "address":
+                    user_data.street_address = values
+                if key == "gender":
+                    user_data.gender = values
+                if key == "pincode":
+                    user_data.pincode = values
+                if key == "country":
+                    user_data.country = values
+                if key == "gov_id_type":
+                    user_data.gov_id_type = values
+                if key == "gov_id_number":
+                    user_data.gov_id_no = values
+                if key == "password":
+                    
+                    if request.POST.get("password") == request.POST.get("password1"):
+                        change_password(values, pk)
+                    else:
+                        redirect("profile", pk=pk)
+                user_data.save()
+            except:
+                redirect("profile", pk=pk)
+    
+    
+    return redirect("profile", pk=pk)
+
+            
+
+            
+
+    
+    return HttpResponse("Done!!")
 
 def index_view(request):
     doctors = UserModel.objects.filter(usertype = 'doctor')
@@ -185,6 +287,7 @@ def book_appointment(request, pk, user):
     context["clicked_date"] = available_dates[0]
 
     if request.method == "POST":
+        print(request.POST)
         date = request.POST.get("date")
         available_timings = None
         for slot in slots:
@@ -196,33 +299,23 @@ def book_appointment(request, pk, user):
             context["available_timings"] = available_timings
         # print(context )
         context["clicked_date"] = str(date)
-        # context["user"] = 
-        # return render(request, "accounts/book_appointment.html", context)
-        
-    # available_timings = []
-    # for slot in available_dates:
-    #     available_timings.append(SlotsTime.objects.filter(slottiming_id=slot.id))
-    # for i in available_timings:
-    #     print(i)
 
     if len(available_dates) == 0:
-        # print("helli")
         context["errors"] = "Not available"
 
     context["available_dates"] = available_dates
     context["appointment_type"] = AppointmentType()
     context["doctor"] = pk
-    # print(context)
+
     return render(request, "accounts/book_appointment.html", context)
 
 def save_appointment(request, doctor, user):
     data  = request.POST
-    print(data)
     full_name = PatientUserModel.objects.get(id=user).__str__()
     appointment_type = data.get("appointment_type")
     slots = data.get("time")
     appointment = Appointment.objects.create(user_id=user,full_name=full_name, appointment_type=appointment_type)
-    appointment.slots = slots
+    appointment.slots = str(slots)
     appointment.save()
 
     book_appointment = BookAppointment.objects.create(doctor_id=doctor, appointment_id=appointment.id, full_name=full_name, appointment_type=appointment_type)
@@ -233,6 +326,29 @@ def save_appointment(request, doctor, user):
     reports = Reports.objects.create(prescription_id=prescription.id)
     reports.save()
 
-    return HttpResponse("dome")
+    return render(request, "accounts/done.html")
 
 
+
+def set_slots(request, pk):
+    context = {}
+    user = User.objects.get(id=pk)
+    user_model = UserModel.objects.get(user_id=pk)
+    user_data = DoctorUserModel.objects.get(doctor_id=user_model.id)
+
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        slotdate = Slots.objects.create(doctor_slot_id = user_data.id, date=data.get("date"))
+        slottime = SlotsTime.objects.create(slottiming_id=slotdate.id, time=data.get("time"))
+        slottime.save()
+        slotdate.save()
+        
+    # available_dates = 
+    context["date"] = datetime.date.today()
+    context["user"] = user
+    context["user_model"] = user_model
+    context["user_data"] = user_data
+    context["pk"] = pk
+
+    return render(request, "accounts/book_appointment.html", context)
